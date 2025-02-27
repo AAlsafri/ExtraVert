@@ -23,20 +23,57 @@ foreach (var plant in plants){
 string choice = null;
 while (choice != "0")
 {
+Console.Clear();
 Console.WriteLine(@"
 Select an option:
 0. Exit
 1. View all plants
+2. Post a plant for adaption
+3. Adapt a plant
+4. Delist a plant
 ");
 
         choice = Console.ReadLine();
         if (choice == "0")
         {
-            Console.WriteLine("Goodbye!");
+            Console.WriteLine("Are you sure you want to end the program? (yes/no)");
+            string? response = Console.ReadLine().Trim().ToLower();
+
+            // Console.ReadLine()
+            if (response == "yes")
+            {
+                Console.WriteLine("Goodbye!");
+                break;
+            }
+            else
+            {
+                Console.WriteLine("Returning to the main menu...");
+                choice = null;
+            }
         }
         else if (choice == "1")
         {
             ListPlants();
+        }
+        else if (choice == "2")
+        {
+            // PostPlant();
+            throw new NotImplementedException();
+        }
+        else if (choice == "3")
+        {
+            // AdaptPlant();
+            throw new NotImplementedException();
+        }
+        else if (choice == "4")
+        {
+            // DelistPlant();
+            throw new NotImplementedException();
+        }
+        else
+        {
+            Console.WriteLine(@$"{choice} Is not a valid option. Please enter a valid option from the list below.");
+            choice = null;
         }
 }
 
