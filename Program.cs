@@ -15,15 +15,14 @@ List<Plant> plants = new List<Plant>()
     new Plant() { Species = "Aloe Vera", LightNeeds = 4, AskingPrice = 20.00M, City = "Miami", ZIP = "33101", Sold = true },
 };  
 
-foreach (var plant in plants){
-    Console.WriteLine($"{plant.Species}");
-}
+// foreach (var plant in plants){
+//     Console.WriteLine($"{plant.Species}");
+// }
 
 // Main menu
 string choice = null;
 while (choice != "0")
 {
-Console.Clear();
 Console.WriteLine(@"
 Select an option:
 0. Exit
@@ -36,11 +35,11 @@ Select an option:
         choice = Console.ReadLine();
         if (choice == "0")
         {
-            Console.WriteLine("Are you sure you want to end the program? (yes/no)");
+            Console.WriteLine("Are you sure you want to end the program? (y/n)");
             string? response = Console.ReadLine().Trim().ToLower();
 
             // Console.ReadLine()
-            if (response == "yes")
+            if (response == "y")
             {
                 Console.WriteLine("Goodbye!");
                 break;
@@ -57,8 +56,7 @@ Select an option:
         }
         else if (choice == "2")
         {
-            // PostPlant();
-            throw new NotImplementedException();
+            PostPlant();
         }
         else if (choice == "3")
         {
@@ -73,7 +71,10 @@ Select an option:
         else
         {
             Console.WriteLine(@$"{choice} Is not a valid option. Please enter a valid option from the list below.");
+            Console.WriteLine("Press any key to go back to select an option...");
+            Console.ReadKey();
             choice = null;
+            Console.Clear();
         }
 }
 
@@ -83,6 +84,29 @@ void ListPlants()
 
         for (int i = 0; i < plants.Count; i++)
         {
-            Console.WriteLine($"{i + 1}. {plants[i].Species}");
+            Console.WriteLine($"{i + 1}. {plants[i].Species} in {plants[i].City} is available for {plants[i].AskingPrice} dollars.");
         }
+}
+
+void PostPlant()
+{
+    Console.WriteLine("To post a plant, please enter the plant species first: ");
+    string species = Console.ReadLine();
+
+    Console.WriteLine("Enter the plant's light needs (1 for shade, 5 for full sun): ");
+    string lightNeedsInput = Console.ReadLine();
+    int lightNeeds = int.Parse(lightNeedsInput);
+
+    Console.WriteLine("Enter the asking price: ");
+    string askingPriceInput = Console.ReadLine();
+    decimal askingPrice = decimal.Parse(askingPriceInput);
+
+    Console.WriteLine("Enter the city: ");
+    string city = Console.ReadLine();
+
+    Console.WriteLine("Enter the zip: ");
+    string zip = Console.ReadLine();
+    // .. etc
+    plants.Add(new Plant() { Species = species, LightNeeds = lightNeeds, AskingPrice = askingPrice, City = city, ZIP = zip, Sold = false });
+    Console.WriteLine($"Successfully added {species} to the plant list!");
 }
