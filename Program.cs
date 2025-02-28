@@ -1,7 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using System;
 // using System.Collections.Generic; 
-
+Console.Clear();
 string greeting = "Welcome to ExtraVert's Plants shop!";
 Console.WriteLine(greeting);
 
@@ -60,8 +60,7 @@ Select an option:
         }
         else if (choice == "3")
         {
-            // AdaptPlant();
-            throw new NotImplementedException();
+            AdaptPlant();
         }
         else if (choice == "4")
         {
@@ -109,4 +108,62 @@ void PostPlant()
     // .. etc
     plants.Add(new Plant() { Species = species, LightNeeds = lightNeeds, AskingPrice = askingPrice, City = city, ZIP = zip, Sold = false });
     Console.WriteLine($"Successfully added {species} to the plant list!");
+}
+
+void AdaptPlant()
+{
+    Console.WriteLine("To adapt a plant, please enter the number from the following available plants: ");
+
+    List<int> availableIndices = new List<int>();
+
+    for (int i = 0; i < plants.Count; i++)
+    {
+        if(!plants[i].Sold)
+        {
+            Console.WriteLine($"{i + 1}. {plants[i].Species} in {plants[i].City} is available for {plants[i].AskingPrice} dollars.");
+            availableIndices.Add(i);
+        }
+    }
+
+    if (availableIndices.Count == 0)
+    {
+        Console.WriteLine("There are no plants available for adoption atm.");
+        return;
+    }
+
+    Console.WriteLine("Enter the number of the plant you want to adopt: ");
+    string input = Console.ReadLine();
+
+    int userChoice;
+    bool isValidChoice = int.TryParse(input, out userChoice) && userChoice > 0 && userChoice <= availableIndices.Count;
+    if(isValidChoice)
+    {
+        int actualIndex = availableIndices[userChoice - 1];
+        plants[actualIndex].Sold = true;
+        Console.WriteLine($"You have successfully adapted {plants[actualIndex].Species}!");
+    }
+    // string adapted = Console.ReadLine();
+    // int adapt = int.Parse(adapted);
+    // plants.Remove(RemoveAt Plant(adapt) );
+}
+
+
+void availablePlants()
+{
+    Console.WriteLine("Here are available plants for adaption: ");
+    bool hasAvailablePlants = false;
+    for (int i = 0; i < plants.Count; i++)
+    {
+        if(!plants[i].Sold)
+        {
+          Console.WriteLine($"{i + 1}. {plants[i].Species} in {plants[i].City} is available for {plants[i].AskingPrice} dollars.");
+          hasAvailablePlants = true;
+        }
+    }
+
+    if (!hasAvailablePlants)
+    {
+        Console.WriteLine("There are no plants available for adaption atm.");
+        // break;
+    }
 }
