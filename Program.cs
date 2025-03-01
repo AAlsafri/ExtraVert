@@ -14,6 +14,11 @@ List<Plant> plants = new List<Plant>()
     new Plant() { Species = "Cactus", LightNeeds = 5, AskingPrice = 12.75M, City = "Phoenix", ZIP = "85001", Sold = true },
     new Plant() { Species = "Fern", LightNeeds = 1, AskingPrice = 18.00M, City = "Seattle", ZIP = "98101", Sold = false },
     new Plant() { Species = "Aloe Vera", LightNeeds = 4, AskingPrice = 20.00M, City = "Miami", ZIP = "33101", Sold = true },
+    new Plant() { Species = "Peace Lily", LightNeeds = 2, AskingPrice = 22.00M, City = "Chicago", ZIP = "60601", Sold = false },
+    new Plant() { Species = "Rubber Plant", LightNeeds = 3, AskingPrice = 30.00M, City = "Los Angeles", ZIP = "90001", Sold = false },
+    new Plant() { Species = "Bamboo Palm", LightNeeds = 4, AskingPrice = 27.50M, City = "Houston", ZIP = "77001", Sold = true },
+    new Plant() { Species = "ZZ Plant", LightNeeds = 1, AskingPrice = 19.99M, City = "Denver", ZIP = "80201", Sold = false },
+    new Plant() { Species = "Fiddle Leaf Fig", LightNeeds = 5, AskingPrice = 45.00M, City = "San Francisco", ZIP = "94101", Sold = true },
 };  
 
 void RandomPlant()
@@ -48,6 +53,7 @@ Select an option:
 3. Adapt a plant
 4. Delist a plant
 5. Plant of the day
+6. Search for a plant by light needs
 ");
 
         choice = Console.ReadLine();
@@ -88,6 +94,10 @@ Select an option:
         {
             RandomPlant();
         }
+        else if (choice == "6")
+        {
+            SearchPlant();
+        }
         else
         {
             Console.WriteLine(@$"{choice} Is not a valid option. Please enter a valid option from the list below.");
@@ -96,6 +106,41 @@ Select an option:
             choice = null;
             Console.Clear();
         }
+}
+
+void SearchPlant()
+{
+    Console.WriteLine("To search for a plant by light need, enter a number between 1 & 5: ");
+
+    List<Plant> userPlants = new List<Plant>();
+
+    string input = Console.ReadLine();
+    int lightNeed;
+    if (!int.TryParse(input, out lightNeed) || lightNeed < 1 || lightNeed > 5)
+    {
+        Console.WriteLine("Invalid input. Please enter a number between 1 and 5.");
+        return;
+    }
+    foreach (Plant plant in plants)
+    {
+        if (plant.LightNeeds <= lightNeed)
+        {
+            userPlants.Add(plant);
+        }
+    }
+
+    if (userPlants.Count > 0)
+    {
+        Console.WriteLine($"Here are the plants with light needs of {lightNeed}/5 or lower:");
+        for (int i = 0; i < userPlants.Count; i++)
+        {
+            Console.WriteLine($"{i + 1}. {userPlants[i].Species}, needs ({userPlants[i].LightNeeds}/5) light, located in {userPlants[i].City}, available for {userPlants[i].AskingPrice}$.");
+        }
+    }
+    else
+    {
+        Console.WriteLine($"There are no plants with light needs of {lightNeed}/5 or lower.");
+    }
 }
 
 void ListPlants()
