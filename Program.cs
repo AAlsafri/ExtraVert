@@ -6,6 +6,7 @@ string greeting = "Welcome to ExtraVert's Plants shop!";
 Console.WriteLine(greeting);
 
 // Declared globally
+Random randomPlant = new Random();
 List<Plant> plants = new List<Plant>()
 {
     new Plant() { Species = "Monstera", LightNeeds = 3, AskingPrice = 25.00M, City = "Atlanta", ZIP = "30301", Sold = false },
@@ -15,9 +16,25 @@ List<Plant> plants = new List<Plant>()
     new Plant() { Species = "Aloe Vera", LightNeeds = 4, AskingPrice = 20.00M, City = "Miami", ZIP = "33101", Sold = true },
 };  
 
-// foreach (var plant in plants){
-//     Console.WriteLine($"{plant.Species}");
-// }
+void RandomPlant()
+{
+    if (plants.All(p => p.Sold))
+    {
+        Console.WriteLine("No available plants for the day.");
+        return; 
+    }
+    Plant selectedPlant;
+    do
+    {
+        int randomIndex = randomPlant.Next(0, plants.Count);
+        selectedPlant = plants[randomIndex];
+    }
+    while (selectedPlant.Sold); 
+        Console.WriteLine($"{selectedPlant.Species} is your plant for the day!");
+        Console.WriteLine($"The plant is located at {selectedPlant.City}.");
+        Console.WriteLine($"The plant's light need is ({selectedPlant.LightNeeds}/5).");
+        Console.WriteLine($"The plant is priced at {selectedPlant.AskingPrice}$.");
+}
 
 // Main menu
 string choice = null;
@@ -30,6 +47,7 @@ Select an option:
 2. Post a plant for adaption
 3. Adapt a plant
 4. Delist a plant
+5. Plant of the day
 ");
 
         choice = Console.ReadLine();
@@ -66,6 +84,10 @@ Select an option:
         {
             DelistPlant();
         }
+        else if (choice == "5")
+        {
+            RandomPlant();
+        }
         else
         {
             Console.WriteLine(@$"{choice} Is not a valid option. Please enter a valid option from the list below.");
@@ -82,7 +104,7 @@ void ListPlants()
 
         for (int i = 0; i < plants.Count; i++)
         {
-            Console.WriteLine($"{i + 1}. {plants[i].Species} in {plants[i].City} is available for {plants[i].AskingPrice} dollars.");
+            Console.WriteLine($"{i + 1}. {plants[i].Species}, has light needs of ({plants[i].LightNeeds}/5), located in {plants[i].City} and is available for {plants[i].AskingPrice}$.");
         }
 }
 
@@ -119,7 +141,7 @@ void AdaptPlant()
     {
         if(!plants[i].Sold)
         {
-            Console.WriteLine($"{i + 1}. {plants[i].Species} in {plants[i].City} is available for {plants[i].AskingPrice} dollars.");
+            Console.WriteLine($"{i + 1}. {plants[i].Species} in {plants[i].City} is available for {plants[i].AskingPrice}$.");
             availableIndices.Add(i);
         }
     }
@@ -155,7 +177,7 @@ void availablePlants()
     {
         if(!plants[i].Sold)
         {
-          Console.WriteLine($"{i + 1}. {plants[i].Species} in {plants[i].City} is available for {plants[i].AskingPrice} dollars.");
+          Console.WriteLine($"{i + 1}. {plants[i].Species} in {plants[i].City} is available for {plants[i].AskingPrice}$.");
           hasAvailablePlants = true;
         }
     }
@@ -197,3 +219,4 @@ void DelistPlant()
     }
 
 }
+
