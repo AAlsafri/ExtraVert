@@ -64,8 +64,7 @@ Select an option:
         }
         else if (choice == "4")
         {
-            // DelistPlant();
-            throw new NotImplementedException();
+            DelistPlant();
         }
         else
         {
@@ -166,4 +165,35 @@ void availablePlants()
         Console.WriteLine("There are no plants available for adaption atm.");
         // break;
     }
+}
+
+void DelistPlant()
+{
+    ListPlants();
+    Console.WriteLine("\nTo delist a plant, please enter a plant number: ");
+
+    string input = Console.ReadLine();
+    int plantNumber;
+
+    if (int.TryParse(input, out plantNumber) && plantNumber > 0 && plantNumber <= plants.Count)
+    {
+        int indexToRemove = plantNumber - 1;
+        Console.WriteLine($"Are you sure you want to delist {plants[indexToRemove].Species}? (y/n) ");
+        string confirmation = Console.ReadLine().Trim().ToLower();
+
+        if (confirmation == "y")
+        {
+            plants.RemoveAt(indexToRemove);
+            Console.WriteLine("Plant successfully delisted.");
+        }
+        else 
+        {
+            Console.WriteLine("Delisting canceled.");
+        }
+    }
+    else
+    {
+        Console.WriteLine("Invalid input. Please enter a valid plant number.");
+    }
+
 }
