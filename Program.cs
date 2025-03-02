@@ -9,37 +9,17 @@ Console.WriteLine(greeting);
 Random randomPlant = new Random();
 List<Plant> plants = new List<Plant>()
 {
-    new Plant() { Species = "Monstera", LightNeeds = 3, AskingPrice = 25.00M, City = "Atlanta", ZIP = "30301", Sold = false },
-    new Plant() { Species = "Snake Plant", LightNeeds = 2, AskingPrice = 15.50M, City = "New York", ZIP = "10001", Sold = false },
-    new Plant() { Species = "Cactus", LightNeeds = 5, AskingPrice = 12.75M, City = "Phoenix", ZIP = "85001", Sold = true },
-    new Plant() { Species = "Fern", LightNeeds = 1, AskingPrice = 18.00M, City = "Seattle", ZIP = "98101", Sold = false },
-    new Plant() { Species = "Aloe Vera", LightNeeds = 4, AskingPrice = 20.00M, City = "Miami", ZIP = "33101", Sold = true },
-    new Plant() { Species = "Peace Lily", LightNeeds = 2, AskingPrice = 22.00M, City = "Chicago", ZIP = "60601", Sold = false },
-    new Plant() { Species = "Rubber Plant", LightNeeds = 3, AskingPrice = 30.00M, City = "Los Angeles", ZIP = "90001", Sold = false },
-    new Plant() { Species = "Bamboo Palm", LightNeeds = 4, AskingPrice = 27.50M, City = "Houston", ZIP = "77001", Sold = true },
-    new Plant() { Species = "ZZ Plant", LightNeeds = 1, AskingPrice = 19.99M, City = "Denver", ZIP = "80201", Sold = false },
-    new Plant() { Species = "Fiddle Leaf Fig", LightNeeds = 5, AskingPrice = 45.00M, City = "San Francisco", ZIP = "94101", Sold = true },
+    new Plant() { Species = "Monstera", LightNeeds = 3, AskingPrice = 25.00M, City = "Atlanta", ZIP = "30301", AvailableUntil = new DateTime(2025, 11, 25), Sold = false },
+    new Plant() { Species = "Snake Plant", LightNeeds = 2, AskingPrice = 15.50M, City = "New York", ZIP = "10001", AvailableUntil = new DateTime(2025, 10, 20), Sold = false },
+    new Plant() { Species = "Cactus", LightNeeds = 5, AskingPrice = 12.75M, City = "Phoenix", ZIP = "85001", AvailableUntil = new DateTime(2022, 10, 20), Sold = true },
+    new Plant() { Species = "Fern", LightNeeds = 1, AskingPrice = 18.00M, City = "Seattle", ZIP = "98101", AvailableUntil = new DateTime(2025, 03, 22), Sold = false },
+    new Plant() { Species = "Aloe Vera", LightNeeds = 4, AskingPrice = 20.00M, City = "Miami", ZIP = "33101", AvailableUntil = new DateTime(2022, 12, 14), Sold = true },
+    new Plant() { Species = "Peace Lily", LightNeeds = 2, AskingPrice = 22.00M, City = "Chicago", ZIP = "60601", AvailableUntil = new DateTime(2025, 10, 16), Sold = false },
+    new Plant() { Species = "Rubber Plant", LightNeeds = 3, AskingPrice = 30.00M, City = "Los Angeles", ZIP = "90001", AvailableUntil = new DateTime(2025, 11, 20), Sold = false },
+    new Plant() { Species = "Bamboo Palm", LightNeeds = 4, AskingPrice = 27.50M, City = "Houston", ZIP = "77001", AvailableUntil = new DateTime(2022, 10, 20), Sold = true },
+    new Plant() { Species = "ZZ Plant", LightNeeds = 1, AskingPrice = 19.99M, City = "Denver", ZIP = "80201", AvailableUntil = new DateTime(2026, 10, 20), Sold = false },
+    new Plant() { Species = "Fiddle Leaf Fig", LightNeeds = 5, AskingPrice = 45.00M, City = "San Francisco", ZIP = "94101", AvailableUntil = new DateTime(2026, 01, 19), Sold = true },
 };  
-
-void RandomPlant()
-{
-    if (plants.All(p => p.Sold))
-    {
-        Console.WriteLine("No available plants for the day.");
-        return; 
-    }
-    Plant selectedPlant;
-    do
-    {
-        int randomIndex = randomPlant.Next(0, plants.Count);
-        selectedPlant = plants[randomIndex];
-    }
-    while (selectedPlant.Sold); 
-        Console.WriteLine($"{selectedPlant.Species} is your plant for the day!");
-        Console.WriteLine($"The plant is located at {selectedPlant.City}.");
-        Console.WriteLine($"The plant's light need is ({selectedPlant.LightNeeds}/5).");
-        Console.WriteLine($"The plant is priced at {selectedPlant.AskingPrice}$.");
-}
 
 // Main menu
 string choice = null;
@@ -149,7 +129,7 @@ void ListPlants()
 
         for (int i = 0; i < plants.Count; i++)
         {
-            Console.WriteLine($"{i + 1}. {plants[i].Species}, has light needs of ({plants[i].LightNeeds}/5), located in {plants[i].City} and is available for {plants[i].AskingPrice}$.");
+            Console.WriteLine($"{i + 1}. {plants[i].Species}, has light needs of ({plants[i].LightNeeds}/5), located in {plants[i].City}, it is available until {plants[i].AvailableUntil} and is available for {plants[i].AskingPrice}$.");
         }
 }
 
@@ -171,8 +151,19 @@ void PostPlant()
 
     Console.WriteLine("Enter the zip: ");
     string zip = Console.ReadLine();
-    // .. etc
-    plants.Add(new Plant() { Species = species, LightNeeds = lightNeeds, AskingPrice = askingPrice, City = city, ZIP = zip, Sold = false });
+    
+    Console.WriteLine("Available until? Enter the year first (e.g. 2025): ");
+    int year = int.Parse(Console.ReadLine());
+
+    Console.WriteLine("Now enter the month (e.g. 01-12): ");
+    int month = int.Parse(Console.ReadLine());
+
+    Console.WriteLine("Lastly enter the day (e.g. 01-31): ");
+    int day = int.Parse(Console.ReadLine());
+
+    DateTime availableUntil = new DateTime(year, month, day);
+
+    plants.Add(new Plant() { Species = species, LightNeeds = lightNeeds, AskingPrice = askingPrice, City = city, ZIP = zip, AvailableUntil = availableUntil, Sold = false });
     Console.WriteLine($"Successfully added {species} to the plant list!");
 }
 
@@ -186,8 +177,11 @@ void AdaptPlant()
     {
         if(!plants[i].Sold)
         {
-            Console.WriteLine($"{i + 1}. {plants[i].Species} in {plants[i].City} is available for {plants[i].AskingPrice}$.");
+            if(plants[i].AvailableUntil > DateTime.Now)
+            {
+            Console.WriteLine($"{i + 1}. {plants[i].Species} in {plants[i].City} is available until {plants[i].AvailableUntil} and cost {plants[i].AskingPrice}$.");
             availableIndices.Add(i);
+            }
         }
     }
 
@@ -208,9 +202,6 @@ void AdaptPlant()
         plants[actualIndex].Sold = true;
         Console.WriteLine($"You have successfully adapted {plants[actualIndex].Species}!");
     }
-    // string adapted = Console.ReadLine();
-    // int adapt = int.Parse(adapted);
-    // plants.Remove(RemoveAt Plant(adapt) );
 }
 
 
@@ -263,5 +254,25 @@ void DelistPlant()
         Console.WriteLine("Invalid input. Please enter a valid plant number.");
     }
 
+}
+
+void RandomPlant()
+{
+    if (plants.All(p => p.Sold))
+    {
+        Console.WriteLine("No available plants for the day.");
+        return; 
+    }
+    Plant selectedPlant;
+    do
+    {
+        int randomIndex = randomPlant.Next(0, plants.Count);
+        selectedPlant = plants[randomIndex];
+    }
+    while (selectedPlant.Sold); 
+        Console.WriteLine($"{selectedPlant.Species} is your plant for the day!");
+        Console.WriteLine($"The plant is located at {selectedPlant.City}.");
+        Console.WriteLine($"The plant's light need is ({selectedPlant.LightNeeds}/5).");
+        Console.WriteLine($"The plant is priced at {selectedPlant.AskingPrice}$.");
 }
 
