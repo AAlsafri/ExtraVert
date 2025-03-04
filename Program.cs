@@ -34,6 +34,7 @@ Select an option:
 4. Delist a plant
 5. Plant of the day
 6. Search for a plant by light needs
+7. App statistics
 ");
 
         choice = Console.ReadLine();
@@ -78,6 +79,10 @@ Select an option:
         {
             SearchPlant();
         }
+        else if (choice == "7")
+        {
+            Statistics();
+        }
         else
         {
             Console.WriteLine(@$"{choice} Is not a valid option. Please enter a valid option from the list below.");
@@ -86,6 +91,50 @@ Select an option:
             choice = null;
             Console.Clear();
         }
+}
+
+void Statistics()
+{
+    Console.WriteLine(@"
+General statistics about the plants listed: 
+    ");
+
+    // Var per each stat
+    Plant lowestPricePlant = plants[0];
+    int availablePlants = 0;
+    Plant lightNeeds = plants[0];
+    int totalLightNeeds = 0;
+    int adoptedPlants = 0;
+
+    foreach (Plant plant in plants)
+    {
+        if (plant.AskingPrice < lowestPricePlant.AskingPrice)
+        {
+            lowestPricePlant = plant;
+        }
+        if (!plant.Sold)
+        {
+            availablePlants++;
+        }
+        if (plant.LightNeeds > lightNeeds.LightNeeds)
+        {
+            lightNeeds = plant;
+        }
+
+        totalLightNeeds+= plant.LightNeeds;
+        if (plant.Sold)
+        {
+            adoptedPlants++;
+        } 
+    }
+    double avgLightNeeds = (double)totalLightNeeds / plants.Count;
+    decimal adoptionPercentage = (decimal)adoptedPlants / plants.Count * 100;
+
+    Console.WriteLine($"1. The lowest price plant is {lowestPricePlant.Species} at ${lowestPricePlant.AskingPrice}.");
+    Console.WriteLine($"2. The number of plants available is: {availablePlants} plants.");
+    Console.WriteLine($"3. The plant with highest light needs is: {lightNeeds.Species}.");
+    Console.WriteLine($"4. The average light needs for the plants listed is: {avgLightNeeds:F2}.");
+    Console.WriteLine($"5. The percentage of adopted plants is: %{adoptionPercentage:F2}.");
 }
 
 void SearchPlant()
