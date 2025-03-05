@@ -188,12 +188,18 @@ void PostPlant()
     string species = Console.ReadLine();
 
     Console.WriteLine("Enter the plant's light needs (1 for shade, 5 for full sun): ");
-    string lightNeedsInput = Console.ReadLine();
-    int lightNeeds = int.Parse(lightNeedsInput);
+    int lightNeeds;
+    while (!int.TryParse(Console.ReadLine(), out lightNeeds) || lightNeeds < 1 || lightNeeds > 5) 
+    {
+        Console.WriteLine("Invalid input. Please enter a number between 1 & 5 only.");
+    }
 
     Console.WriteLine("Enter the asking price: ");
-    string askingPriceInput = Console.ReadLine();
-    decimal askingPrice = decimal.Parse(askingPriceInput);
+    decimal askingPrice;
+    while (!decimal.TryParse(Console.ReadLine(), out askingPrice) || askingPrice < 0)
+    {
+        Console.WriteLine("Invalid input. Please enter a valid price.");
+    }
 
     Console.WriteLine("Enter the city: ");
     string city = Console.ReadLine();
@@ -201,18 +207,43 @@ void PostPlant()
     Console.WriteLine("Enter the zip: ");
     string zip = Console.ReadLine();
     
-    Console.WriteLine("Available until? Enter the year first (e.g. 2025): ");
-    int year = int.Parse(Console.ReadLine());
+    DateTime availableUntil;
+    while (true)
+    {
+        try 
+        {
+            Console.WriteLine("Available until? Enter the year first (e.g. 2025): ");
+            int year = int.Parse(Console.ReadLine());
 
-    Console.WriteLine("Now enter the month (e.g. 01-12): ");
-    int month = int.Parse(Console.ReadLine());
+            Console.WriteLine("Now enter the month (e.g. 01-12): ");
+            int month = int.Parse(Console.ReadLine());
 
-    Console.WriteLine("Lastly enter the day (e.g. 01-31): ");
-    int day = int.Parse(Console.ReadLine());
+            Console.WriteLine("Lastly enter the day (e.g. 01-31): ");
+            int day = int.Parse(Console.ReadLine());
 
-    DateTime availableUntil = new DateTime(year, month, day);
+            availableUntil = new DateTime(year, month, day);
+            break;
+        }
+        catch (ArgumentOutOfRangeException)
+        {
+            Console.WriteLine("Invalid date. Please enter a valid year, month and day.");
+        }
+        catch (FormatException)
+        {
+            Console.WriteLine("Invalid input. Please enter numbers only.");
+        }
+    }
 
-    plants.Add(new Plant() { Species = species, LightNeeds = lightNeeds, AskingPrice = askingPrice, City = city, ZIP = zip, AvailableUntil = availableUntil, Sold = false });
+    plants.Add(new Plant() 
+    { 
+        Species = species,
+        LightNeeds = lightNeeds,
+        AskingPrice = askingPrice,
+        City = city, 
+        ZIP = zip, 
+        AvailableUntil = availableUntil, 
+        Sold = false 
+    });
     Console.WriteLine($"Successfully added {species} to the plant list!");
 }
 
