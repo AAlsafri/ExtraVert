@@ -93,6 +93,11 @@ Select an option:
         }
 }
 
+string PlantDetails(Plant plant)
+{
+    return $"Species: {plant.Species}\nLight Needs: ({plant.LightNeeds}/5)\nPrice: ${plant.AskingPrice:F2}\nLocation: {plant.City}\nZIP: {plant.ZIP}\nAvailable Until: {plant.AvailableUntil:MM/dd/yyyy}";
+}
+
 void Statistics()
 {
     Console.WriteLine(@"
@@ -163,7 +168,7 @@ void SearchPlant()
         Console.WriteLine($"Here are the plants with light needs of {lightNeed}/5 or lower:");
         for (int i = 0; i < userPlants.Count; i++)
         {
-            Console.WriteLine($"{i + 1}. {userPlants[i].Species}, needs ({userPlants[i].LightNeeds}/5) light, located in {userPlants[i].City}, available for {userPlants[i].AskingPrice}$.");
+            Console.WriteLine($"{i + 1}. {PlantDetails(plants[i])}");
         }
     }
     else
@@ -178,7 +183,7 @@ void ListPlants()
 
         for (int i = 0; i < plants.Count; i++)
         {
-            Console.WriteLine($"{i + 1}. {plants[i].Species}, has light needs of ({plants[i].LightNeeds}/5), located in {plants[i].City}, it is available until {plants[i].AvailableUntil} and is available for {plants[i].AskingPrice}$.");
+            Console.WriteLine($"{i + 1}. {PlantDetails(plants[i])}");
         }
 }
 
@@ -255,13 +260,10 @@ void AdaptPlant()
 
     for (int i = 0; i < plants.Count; i++)
     {
-        if(!plants[i].Sold)
+        if(!plants[i].Sold && plants[i].AvailableUntil > DateTime.Now)
         {
-            if(plants[i].AvailableUntil > DateTime.Now)
-            {
-            Console.WriteLine($"{i + 1}. {plants[i].Species} in {plants[i].City} is available until {plants[i].AvailableUntil} and cost {plants[i].AskingPrice}$.");
+            Console.WriteLine($"{i + 1}. {PlantDetails(plants[i])}");
             availableIndices.Add(i);
-            }
         }
     }
 
@@ -349,10 +351,6 @@ void RandomPlant()
         int randomIndex = randomPlant.Next(0, plants.Count);
         selectedPlant = plants[randomIndex];
     }
-    while (selectedPlant.Sold); 
-        Console.WriteLine($"{selectedPlant.Species} is your plant for the day!");
-        Console.WriteLine($"The plant is located at {selectedPlant.City}.");
-        Console.WriteLine($"The plant's light need is ({selectedPlant.LightNeeds}/5).");
-        Console.WriteLine($"The plant is priced at {selectedPlant.AskingPrice}$.");
+    while (selectedPlant.Sold || selectedPlant.AvailableUntil <= DateTime.Now); 
+        Console.WriteLine($"Plant of the Day: {PlantDetails(selectedPlant)}");
 }
-
