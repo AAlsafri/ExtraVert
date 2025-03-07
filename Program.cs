@@ -133,7 +133,9 @@ General statistics about the plants listed:
         } 
     }
     double avgLightNeeds = (double)totalLightNeeds / plants.Count;
-    decimal adoptionPercentage = (decimal)adoptedPlants / plants.Count * 100;
+    decimal adoptionPercentage = (adoptedPlants + availablePlants) > 0 
+            ? (decimal)adoptedPlants / (adoptedPlants + availablePlants) * 100
+            : 0;
 
     Console.WriteLine($"1. The lowest price plant is {lowestPricePlant.Species} at ${lowestPricePlant.AskingPrice}.");
     Console.WriteLine($"2. The number of plants available is: {availablePlants} plants.");
